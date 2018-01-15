@@ -352,7 +352,7 @@ class DataAPI {
       let counts = {};
       for (let row of result.rows)
         counts[row.key] = row.value;
-      for (let id of lectureIds) {
+      for (let id of questionIds) {
         if (!(id in counts))
           counts[id] = 0;
       }

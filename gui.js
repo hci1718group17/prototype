@@ -352,18 +352,52 @@ class LectureOverviewActivity extends Activity {
       if (err)
         return alert(`Retrieving data from server failed: ${err}`);
 
-      let list = this.rootElement.querySelector('.question-list');
-      list.innerHTML = '';
-      questions.forEach(question => {
-        let item = document.createElement('a');
-        item.classList.add('list-group-item', 'list-group-item-action');
-        item.textContent = question.title;
-        item.setAttribute('href', '#');
-        item.addEventListener('click', event => {
-          event.preventDefault();
-          this.startActivity(new ViewQuestionActivity(this.context, this.lecture, question));
+      let userIds = questions.map(q => q.author).filter(a => a != null);
+      this.context.dataApi.getUserDisplayNames(userIds, (err, userNames) => {
+        if (err) {
+          alert(`Failed to retrieve user information: ${err}`);
+          userNames = {};
+        }
+
+        let questionIds = questions.map(q => q._id);
+        this.context.dataApi.getNumberOfAnswersByQuestion(questionIds, (err, answerCounts) => {
+          if (err) {
+            alert(`Failed to retrieve data from server: ${err}`);
+            questionCounts = {};
+          }
+
+          let list = this.rootElement.querySelector('.question-list');
+          list.innerHTML = '';
+          questions.forEach(question => {
+            let item = document.createElement('a');
+            item.setAttribute('href', '#');
+            item.classList.add('list-group-item', 'list-group-item-action', 'flex-column', 'align-items-start');
+            let header = document.createElement('div');
+            header.classList.add('d-fle', 'w-100', 'justify-content-between');
+            let title = document.createElement('h5');
+            title.classList.add('mb-1');
+            title.textContent = question.title;
+            header.appendChild(title);
+            let meta = document.createElement('small');
+            let userName = question.author == null ? 'anonym' : (userNames[question.author] == null ?
+                                                                 'unbekannt' :
+                                                                 userNames[question.author]);
+            let metaText = `Von ${userName} ${moment(question.time).fromNow()}`;
+            if (typeof answerCounts[question._id] == 'number') {
+              let count = answerCounts[question._id];
+              let w = count === 1 ? 'Antwort' : 'Antworten';
+              metaText += ` • ${count} ${w}`;
+            }
+            meta.textContent = metaText;
+            header.appendChild(meta);
+            item.appendChild(header);
+            item.addEventListener('click', event => {
+              event.preventDefault();
+              this.startActivity(new ViewQuestionActivity(this.context, this.lecture, question));
+            });
+            list.appendChild(item);
+          });
         });
-        list.appendChild(item);
       });
     });
   }
@@ -377,7 +411,7 @@ class LectureOverviewActivity extends Activity {
     elem.appendChild(title);
     let askQuestionButton = document.createElement('button');
     askQuestionButton.setAttribute('type', 'button');
-    askQuestionButton.classList.add('ask-question-button', 'btn', 'btn-secondary');
+    askQuestionButton.classList.add('ask-question-button', 'btn', 'btn-primary');
     askQuestionButton.textContent = 'Frage stellen';
     elem.appendChild(askQuestionButton);
     let list = document.createElement('div');
