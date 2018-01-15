@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/locale/de.js"></script>
+    <script type="text/javascript" src="api.js"></script>
+    <script type="text/javascript" src="woz.js"></script>
+    <title>Fragen und Antworten</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Verwalten</h1>
+      <div class="row py-2">
+        <button type="button" class="btn btn-secondary mr-2" id="install-database-button">Datenbank installieren</button>
+        <a href="http://127.0.0.1:5984/_utils" target="_blank" class="btn btn-secondary">Verwaltung öffnen</a>
+      </div>
+      <form id="create-lecture-form" class="py-2">
+        <div class="form-group row">
+          <label for="lecture-name-input" class="col-sm-3">Veranstaltung erstellen:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="lecture-name-input" placeholder="Veranstaltungsname" />
+          </div>
+          <button type="submit" class="btn btn-primary col-sm-3">Erstellen</button>
+        </div>
+      </form>
+      <form id="create-user-form" class="py-2">
+        <div class="form-group">
+          <label for="user-username-input">Benutzername:</label>
+          <input type="text" class="form-control" id="user-username-input" placeholder="Benutzername" />
+        </div>
+        <div class="form-group">
+          <label for="user-public-name-input">Öffentlicher Name:</label>
+          <input type="text" class="form-control" id="user-public-name-input" placeholder="Öffentlicher Name" />
+        </div>
+        <div class="form-group">
+            <label for="user-password-input">Passwort:</label>
+            <input type="password" class="form-control" id="user-password-input" placeholder="Passwort" />
+          </div>
+        <button type="submit" class="btn btn-primary">Benutzer erstellen</button>
+      </form>
+      <div class="row">
+        <textarea readonly id="log-text" class="col-sm-12"></textarea>
+      </div>
+    </div>
+  </body>
+</html>
