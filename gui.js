@@ -339,7 +339,7 @@ class LectureOverviewActivity extends Activity {
     super.onResume();
 
     this.reloadQuestions();
-    this.reloadInterval = setInterval(() => this.reloadQuestions(), 10000);
+    this.reloadInterval = setInterval(() => this.reloadQuestions(), 5000);
   }
 
   onPause() {

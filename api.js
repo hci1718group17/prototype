@@ -326,7 +326,9 @@ class DataAPI {
     this.dbApi.executeView(this.dbName, '_design/lectures', 'get-questions-by-lecture', { key: lectureId }, (err, result) => {
       if (err)
         return callback(err);
-      return callback(null, result.rows.map(row => row.value));
+      const questions = result.rows.map(row => row.value);
+      questions.sort((qa, qb) => qb.time - qa.time);
+      return callback(null, questions);
     });
   }
 
@@ -360,12 +362,13 @@ class DataAPI {
     });
   }
 
-  // TODO: Sort by date
   getAnswersForQuestion(questionId, callback) {
     this.dbApi.executeView(this.dbName, '_design/lectures', 'get-answers-by-question', { key: questionId }, (err, result) => {
       if (err)
         return callback(err);
-      return callback(null, result.rows.map(row => row.value));
+      const answers = result.rows.map(row => row.value);
+      answers.sort((aa, ab) => aa.time - ab.time);
+      return callback(null, answers);
     });
   }
 
